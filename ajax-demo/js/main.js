@@ -113,20 +113,9 @@ $(function () {
      */
     {
         $("li").eq(4).on("click", function () {
-
-        });
-    }
-
-    /**
-     * 6、$.ajax()
-     */
-    {
-        $("li").eq(5).on("click", function () {
-            $.ajax({
-                url: "data/user.xml",
-                type: "GET",
-                dataType: "xml",
-                success: function (xml) {
+            let jsonObj = {"token":"user-info"};
+            $.post("data/user.xml", jsonObj, function (xml, status) {
+                if(status == "success") {
                     let htmlStr = "";
                     htmlStr += "<p>姓名：<span>" + $(xml).find("name").text() +"</span></p>";
                     htmlStr += "<p>年龄：<span>" + $(xml).find("age").text() +"</span></p>";
@@ -135,9 +124,34 @@ $(function () {
                     $content.html(htmlStr);
                 }
 
+            }, "xml");
+        });
+    }
+
+    /**
+     * 6、$.ajax()
+     */
+    {
+
+
+        $("li").last().on("click", function () {
+            $.ajax({
+                type: "GET",
+                url: "data/content.html",
+                async: true,
+                dataType: "html",
+                success: function (response) {
+                    $content.html(response);
+                },
+                error: function (jqXHR, textStatus) {
+                    console.log(textStatus);
+                }
             });
         });
     }
+
+
+
 
 });
 
