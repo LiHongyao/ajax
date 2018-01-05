@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+body, ul, li {
+    margin:  0;
+    padding: 0;
+}
+
+ul { list-style: none; text-align: center; font-size: 0; }
+a  { text-decoration: none; color: #fff; font-size: 18px; letter-spacing: 1px;}
+
+p span { color: #2397fd; }
+
+ul li { padding: 5px 40px;  display: inline-block; cursor: pointer; }
+ul li:not(:last-child) {border-right: 1px solid #fff;}
+ul li:hover a { text-decoration: underline; }
+
+
+.header-box { width: 100%; min-width: 1200px; padding: 20px 0px; background-color: #2397fd;}
+
+.content { width: 75%; min-width: 1000px; height: auto; border: 1px solid #d3d3d3; border-radius: 10px; margin: 50px auto; padding: 50px;}
+
+
+
+
+
+
+
