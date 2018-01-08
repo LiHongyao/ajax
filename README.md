@@ -29,222 +29,519 @@ AJAX(Asynchronous Javascript And XML)
 ## 4、应用场景
 
 - 场景 1. 数据验证
+
 - 场景 2. 按需取数据
+
 - 场景 3. 自动更新页面
 
-# # AJAX
+# # 相关知识点
 
 ## 1、同步异步
 
 - 同步：主线程执行，客户端发起请求->服务器响应->页面加载，阻塞线程。
 - 异步：后台执行，客户端发起请求->服务器响应->页面加载同时执行。
 
-
-- 学习AJAX需三方面的知识：
-
-
-- 运用HTML和CSS来实现页面，表达信息；
-- 运用XMLHttpRequest和web服务器进行数据的异步交换；
-- 运用JavaScript操作DOM，实现动态局部刷新；
-
-## 2、XMLHttpRequest 对象
-
-XMLHttpReques是实现交互的关键。它是 `Ajax` 实现的关键，发送异步请求、接受响应以及执行回调都是通过它来完成，所有现代浏览器（IE7+、Firefox、Chrome、Safari 以及 Opera）均内建 XMLHttpRequest 对象。
-
-**对象属性 **
-
-- readystate：请求状态
-- responseText：表示响应体的字符串
-- responseXML：表示响应体的XML
-- status：表示返回的HTTP状态码
-- statusText：HTTP响应的状态文本
-- onreadystatechange：当处理过程发生变化的时候执行下面的函数
-
-**对象方法**
-
-- open：打开要发送给服务器的请求
-- send：发送HTTP请求给服务器
-
-创建XMLHttpRequest对象的方式如下：
-
-```javascript
-var xhr = new XMLHttpRequest();
-```
-
-## 3、HTTP请求
-
-http 是计算机通过网络进行通信的规则，http是一种无状态协议。
-
-**一个完整的http请求，通常有下面7个步骤：**
-
-- 1）、建立TCP连接
-- 2）、Web浏览器向Web服务器发送请求命令
-- 3）、Web浏览器发送请求头信息
-- 4）、Web服务器应答
-- 5）、Web服务器发送应答头信息
-- 6）、Web服务器向浏览器发送数据
-- 7）、Web服务器关闭TCP连接
-
-**一个HTTP请求一般由四部分组成：**
-
-- 1）、HTTP请求的方法或动作，比如是GET还是POST请求
-- 2）、URL 请求地址
-- 3）、请求头，包含一些客户端环境信息，身份验证信息等
-- 4）、请求体，也就是请求正文，请求正文中可以包含客户提交的查询字符串信息，表单信息等等。
+## 2、GET & POST
 
 > **GET**：一般用于信息获取，使用URL传递参数，对所发送信息的数量也有限制，一般在2000个字符。
 
 > **POST**：一般用于修改服务器上的资源，对所发送信息的数量无限制。
 
-**一个HTTP响应一般由三部分组成：**
+## 3、HTTP请求
 
-- 1）、一个数字和文字组成的状态码，用来显示请求是成功还是失败；
-- 2）、响应头，响应头也和请求头一样包含许多有用的信息，例如吴福气类型、日期时间、内容类型和长度等。
-- 3）、响应体，也就是响应正文
+http 是计算机通过网络进行通信的规则，http是一种无状态协议。
+
+> 一个完整的http请求，通常有下面7个步骤：
+
+1）、建立TCP连接
+
+2）、Web浏览器向Web服务器发送请求命令
+
+3）、Web浏览器发送请求头信息
+
+4）、Web服务器应答
+
+5）、Web服务器发送应答头信息
+
+6）、Web服务器向浏览器发送数据
+
+7）、Web服务器关闭TCP连接
+
+> 一个HTTP请求一般由四部分组成：
+
+1）、HTTP请求的方法或动作，比如是GET还是POST请求
+
+2）、URL 请求地址
+
+3）、请求头，包含一些客户端环境信息，身份验证信息等
+
+4）、请求体，也就是请求正文，请求正文中可以包含客户提交的查询字符串信息，表单信息等等。
+
+> 一个HTTP响应一般由三部分组成：
+
+1）、一个数字和文字组成的状态码，用来显示请求是成功还是失败；
+
+2）、响应头，响应头也和请求头一样包含许多有用的信息，例如吴福气类型、日期时间、内容类型和长度等。
+
+3）、响应体，也就是响应正文
 
 HTTP状态码由3位数字构成，其中首位数字定义了状态码的类型
 
-> 1、1XX：信息类，表示收到Web浏览器请求，正在进一步的处理中；
->
-> 2、2XX：成功，表示用户请求被正确接收、理解和处理。例如 200 OK；
->
-> 3、3XX：重定向，表示请求没有成功，客户必须采取进一步的动作；
->
-> 4、4XX：客服端错误，表示客户端提交的请求有错误。例如 404 Not Found：请求中引用的文档不存在；
->
-> 5、5XX：服务器错误，表示服务器不能完成对请求的处理。例如 500
+1）、1XX：信息类，表示收到Web浏览器请求，正在进一步的处理中；
 
-## 4、创建 XMLHttpRequest 请求
+2）、2XX：成功，表示用户请求被正确接收、理解和处理。例如 200 OK；
 
-老版本的 `Internet Explorer`（IE5 和 IE6）使用`ActiveX` 对象：
+3）、3XX：重定向，表示请求没有成功，客户必须采取进一步的动作；
+
+4）、4XX：客服端错误，表示客户端提交的请求有错误。例如 404 Not Found：请求中引用的文档不存在；
+
+5）、5XX：服务器错误，表示服务器不能完成对请求的处理。例如 500
+
+# # Ajax 与 XMLHttpRequest
+
+我们通常将 `Ajax` 等同于 `XMLHttpRequest`，但细究起来它们两个是属于不同维度的2个概念。
+
+> 以下是我认为对`Ajax`较为准确的解释：（摘自[what is Ajax](http://www.tutorialspoint.com/ajax/what_is_ajax.htm)）
+> AJAX stands for Asynchronous JavaScript and XML. AJAX is a new technique for creating better, faster, and more interactive web applications with the help of XML, HTML, CSS, and Java Script.
+>
+> AJAX is based on the following open standards:
+>
+> - Browser-based presentation using HTML and Cascading Style Sheets (CSS).
+> - Data is stored in XML format and fetched from the server.
+> - Behind-the-scenes data fetches using XMLHttpRequest objects in the browser.
+> - JavaScript to make everything happen.
+
+从上面的解释中可以知道：`ajax`是一种技术方案，但并不是一种**新技术**。它依赖的是现有的`CSS`/`HTML`/`Javascript`，而其中最核心的依赖是浏览器提供的`XMLHttpRequest`对象，是这个对象使得浏览器可以发出`HTTP`请求与接收`HTTP`响应。
+
+所以我用一句话来总结两者的关系：我们使用`XMLHttpRequest`对象来发送一个`Ajax`请求。
+
+# # XMLHttpRequest 的发展历程
+
+XMLHttpRequest 一开始只是微软浏览器提供的一个接口，后来各大浏览器纷纷效仿也提供了这个接口，再后来W3C对它进行了标准化，提出了[XMLHttpRequest标准](https://www.w3.org/TR/XMLHttpRequest/)。XMLHttpRequest 标准又分为`Level 1`和`Level 2`。
+
+> `XMLHttpRequest Level 1` 主要存在以下缺点：
+
+- 受同源策略的限制，不能发送跨域请求；
+- 不能发送二进制文件（如图片、视频、音频等），只能发送纯文本数据；
+- 在发送和获取数据的过程中，无法实时获取进度信息，只能判断是否完成；
+
+> `XMLHttpRequest Level 2` 是对 `Level 1` 的改进，新增了以下功能：
+
+- 可以发送跨域请求，在服务端允许的情况下；
+- 支持发送和接收二进制数据；
+- 新增formData对象，支持发送表单数据；
+- 发送和获取数据时，可以获取进度信息；
+- 可以设置请求的超时时间；
+
+当然更详细的对比介绍，可以参考[阮一封老师的这篇文章](http://www.ruanyifeng.com/blog/2012/09/xmlhttprequest_level_2.html)，文章中对新增的功能都有具体代码示例。
+
+# # XMLHttpRequest 兼容性
+
+关于`xhr`的浏览器兼容性，大家可以直接查看“[Can I use](http://www.caniuse.com/)”这个网站提供的结果[XMLHttpRequest兼容性](http://caniuse.com/#search=XMLHttpRequest)，下面提供一个截图。
+
+![](/Users/LiHongyao/Desktop/XMLHttpRequest_suport.png)
+
+从图中可以看到：
+
+- IE8/IE9、Opera Mini 完全不支持`xhr`对象
+- IE10/IE11部分支持，不支持 `xhr.responseType`为`json`
+
+# # XMLHttpRequest 发起 Ajax 请求
+
+我们先来看一下 XMLHttpRequest 发送 Ajax 请求的简单示例代码。
 
 ```javascript
-var xhr = new ActiveXObject("Microsoft.XMLHTTP");
-```
-
-为了应对所有的现代浏览器，包括 `IE5` 和 `IE6`，请检查浏览器是否支持 `XMLHttpRequest`对象。如果支持，则创建`XMLHttpRequest`对象。如果不支持，则创建`ActiveXObject`：
-
-兼容各个浏览器的创建`Ajax`的工具函数：
-
-```javascript
-function createRequest() {
-    var xhr = null;
-    try  {
-        xhr = new XMLHttpRequest();
-    }catch(err) {
-        try {
-            xhr = new ActiveXObject("Msxm12.XMLHTTP");
-        }catch(err) {
-            try {
-                xhr = new ActiveXObject("Microsoft.XMLHTTP");
-            }catch(err) {
-                xhr = null;
-            }
-        }
+function sendAjax() {
+  // 1. 创建xhr对象 
+  var xhr = new XMLHttpRequest();
+  // 2. 设置xhr请求的超时时间
+  xhr.timeout = 3000;
+  // 3. 设置响应返回的数据格式
+  xhr.responseType = "json";
+  // 4. 创建一个 post 请求，采用异步
+  xhr.open('GET', 'json/goods.json', true);
+  // 5. 注册相关事件回调处理函数
+  xhr.onload = function(e) { 
+    if(this.status == 200||this.status == 304){
+        alert(this.responseText);
     }
-    return xhr;
+  };
+  xhr.ontimeout = function(e) { ... };
+  xhr.onerror = function(e) { ... };
+  xhr.upload.onprogress = function(e) { ... };
+  
+  //发送数据
+  xhr.send(null);
 }
 ```
 
-## 5、准备请求
+接下来，我们将以问题的形式详细介绍`xhr`的基本使用。
 
-语法形式：
+## 1、如何设置request header
 
-```javascript
-xhr.open(method,url,async);
-```
+在发送`Ajax`请求（实质是一个[HTTP](http://www.tutorialspoint.com/http/http_header_fields.htm)请求）时，我们可能需要设置一些请求头部信息，比如`content-type`、`connection`、`cookie`、`accept-xxx`等。`xhr`提供了`setRequestHeader`来允许我们修改请求 header。
 
-1）、第一个参数表示请求类型的字符串，其值可以是`GET`或者`POST`。
+> ```c
+> void setRequestHeader(DOMString header, DOMString value);
+> ```
 
-- GET 请求：
+注意点：
 
-  ```javascript
-  xhr.open("GET", demo.php?name=Henrry Lee&age=8, true);
-  ```
-
-- POST 请求：
-
-  ```javascript
-  xhr.open("POST", demo.php, true);
-  ```
-
-2）、第二个参数是要作为请求发送目标的URL。
-
-3）、第三个参数是 `true` 或 `false`，表示同步或异步请求（建议异步）
-
-- `false`：同步模式发出的请求会暂停所有javascript代码的执行，知道服务器获得响应为止，如果浏览器在连接网络时或者在下载文件时出了故障，页面就会一直挂起。
-- `true`：异步模式发出的请求，请求对象收发数据的同时，浏览器可以继续加载页面，执行其他javascript代码
-
-## 6、发送请求
+- 方法的第一个参数 header 大小写不敏感，即可以写成`content-type`，也可以写成`Content-Type`，甚至写成`content-Type`;
+- `Content-Type` 的默认值与具体发送的数据类型有关
+- `setRequestHeader` 必须在`open()`方法之后，`send()`方法之前调用，否则会抛错；
+- `setRequestHeader` 可以调用多次，最终的值不会采用覆盖`override`的方式，而是采用追加`append`的方式。下面是一个示例代码：
 
 ```javascript
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'demo.json');
+xhr.setRequestHeader('X-Test', 'one');
+xhr.setRequestHeader('X-Test', 'two');
+// 最终request header中"X-Test"为: one, two
 xhr.send();
 ```
 
-一般情况下，使用`Ajax`提交的参数多是些简单的字符串，可以直接使用`GET`方法将要提交的参数写到`open`方法的`url`参数中，此时`send`方法的参数为`null`或为空。
+## 2、如何获取response header
 
-- GET 请求
+`xhr` 提供了2个用来获取响应头部的方法：
 
-  ```javascript
-  xhr.open("GET", demo.php?name=Henrry Lee&age=8, true);
-  xhr.send(null);
-  ```
+> `DOMString getAllResponseHeaders();`
+>
+> `DOMString getResponseHeader(DOMString header);`
 
-- POST 请求
+前者是获取 response 中的所有header 字段，后者只是获取某个指定 header 字段的值。
 
-  如果需要像 `HTML` 表单那样 `POST` 数据，请使用 `setRequestHeader()`来添加 `HTTP` 头。然后在`send()`方法中规定您希望发送的数据：
+你需要注意的是：
 
-  ```javascript
-  xhr.open("POST",demo.php,true);
-  xhr.setRequestHeder("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
-  xhr.send(null);
-  ```
+[W3C在 xhr 标准中的限制](https://www.w3.org/TR/XMLHttpRequest/) 规定客户端无法获取 response 中的 `Set-Cookie`、`Set-Cookie2` 这2个字段，无论是同域还是跨域请求；
 
-## 7、处理响应
+[W3C在 cors 标准中对于跨域请求的限制](https://www.w3.org/TR/cors/#access-control-allow-credentials-response-header) 规定对于跨域请求，客户端允许获取的response header字段只限于 
+
+“`simple response header`”
+
+“`Access-Control-Expose-Headers`” 
+
+> a. *simple response header* 包括的 header 字段有：`Cache-Control`, `Content-Language`, `Content-Type`, `Expires`, `Last-Modified`, `Pragma`;
+>
+> b. *Access-Control-Expose-Headers*：首先得注意是"*Access-Control-Expose-Headers*"进行**跨域请求**时响应头部中的一个字段，对于同域请求，响应头部是没有这个字段的。这个字段中列举的 header 字段就是服务器允许暴露给客户端访问的字段。
+
+所以 *getAllResponseHeaders()*  只能拿到**限制以外**（即被视为`safe`）的header字段，而不是全部字段；而调用 *getResponseHeader(header)* 方法时，`header` 参数必须是**限制以外**的header字段，否则调用就会报`Refused to get unsafe header` 的错误。
+
+## 3、如何指定 xhr.response 的数据类型
+
+有些时候我们希望 *xhr.response*  返回的就是我们想要的数据类型。比如：响应返回的数据是纯JSON字符串，但我们期望最终通过 *xhr.response*  拿到的直接就是一个 js 对象，我们该怎么实现呢？我们可以通过 *level 2*  提供的 `xhr.responseType` 属性实现。
+
+`responseType` 可设置的格式如下：
+
+| 值               | `xhr.response` 数据类型 | 说明                       |
+| --------------- | ------------------- | ------------------------ |
+| `""`            | `String` 字符串        | 默认值(在不设置`responseType`时) |
+| `"text"`        | `String` 字符串        |                          |
+| `"document"`    | `Document` 对象       | 希望返回 `XML` 格式数据时使用       |
+| `"json"`        | `javascript` 对象     | 存在兼容性问题，IE10/IE11不支持     |
+| `"blob"`        | `Blob` 对象           |                          |
+| `"arrayBuffer"` | `ArrayBuffer` 对象    |                          |
+
+以下是一个请求json的示例：
 
 ```javascript
-xhr.onreadystatechange = function(){
-    if(xhr.readyState == 4 && xhr.status == 200){
-        console.log(xhr.responseText);
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'json/sale.json', true);
+xhr.responseType = 'json';
+xhr.onload = function(e) {
+    if (this.status == 200) {
+        var obj = this.response;
+        console.log(obj);
     }
-}
+};
+xhr.send();
 ```
 
-- `onreadystatechange`：处理过程发生变化的时候执行下面的函数
-- `responseText`：获得字符串形式的响应数据
-- `responseXML`：获得 XML 形式的响应数据
-- `status/statusText`：以数字和文本形式返回HTTP状态码
-- `getAllResponseHeader()`：获取所有的响应报头
-- `getResponseHeader()`：查询响应中的某个字段的值
-- `readyState`
-  - 0：请求未初始化（还没有调用 `open()`）。
-  - 1：请求已经建立，但是还没有发送（还没有调用 `send()`）。
-  - 2：请求已发送，正在处理中（通常现在可以从响应中获取内容头）。
-  - 3：请求在处理中；通常响应中已有部分数据可用了，但是服务器还没有完成响应的生成。
-  - 4：响应已完成；您可以获取并使用服务器的响应了
-- 返回值一般为`json`字符串，可以用`JSON.parse(xhr.responseText)`转化为`JSON`对象
+## 4、如何获取response数据
 
-## 8、完整示例
+`xhr `提供了3个属性来获取请求返回的数据
+
+- `xhr.response`
+  - 默认值：空字符串`""`
+  - 当请求完成时，此属性才有正确的值
+  - 请求未完成时，此属性的值可能是`""`或者 `null`，具体与 `xhr.responseType`有关：当`responseType`为`""`或`"text"`时，值为`""`；`responseType`为其他值时，值为 `null`
+- `xhr.responseText`
+  - 默认值为空字符串`""`
+  - 只有当 `responseType` 为`"text"`、`""`时，`xhr`对象上才有此属性，此时才能调用`xhr.responseText`，否则抛错
+  - 只有当请求成功时，才能拿到正确值。以下2种情况下值都为空字符串`""`：请求未完成、请求失败
+- `xhr.responseXML`
+  - 默认值为 `null`
+  - 只有当 `responseType` 为`"text"`、`""`、`"document"`时，`xhr`对象上才有此属性，此时才能调用`xhr.responseXML`，否则抛错
+  - 只有当请求成功且返回数据被正确解析时，才能拿到正确值。以下3种情况下值都为`null`：请求未完成、请求失败、请求成功但返回数据无法被正确解析时
+
+## 5、如何追踪 ajax 请求的当前状态
+
+在发一个`ajax`请求后，如果想追踪请求当前处于哪种状态，该怎么做呢？
+
+用 `xhr.readyState` 这个属性即可追踪到。这个属性是只读属性，总共有5种可能值，分别对应 xhr 不同的不同阶段。每次 *xhr.readyState* 的值发生变化时，都会触发 `xhr.onreadystatechange`事件，我们可以在这个事件中进行相关状态判断。
 
 ```javascript
-function ajax(url, success, fail){
-    // 1\. 创建连接
-    var xhr = new XMLHttpRequest()
-    // 2\. 配置请求
-    xhr.open('get', url, true)
-    // 3\. 发送请求
-    xhr.send(null);
-    // 4\. 接受请求
-    xhr.onreadystatechange = function(){
-        if(xhr.readyState == 4){
-            if(xhr.status == 200){
-                success(xhr.responseText);
-            } else { // fail
-                fail && fail(xhr.status);
-            }
-        }
+xhr.onreadystatechange = function () {
+    switch(xhr.readyState){
+        case 1://OPENED
+            //do something
+            break;
+        case 2://HEADERS_RECEIVED
+            //do something
+            break;
+        case 3://LOADING
+            //do something
+            break;
+        case 4://DONE
+            //do something
+            break;
     }
-}
+};
+```
+
+| 值    | 状态                         | 描述                                       |
+| ---- | -------------------------- | ---------------------------------------- |
+| `0`  | `UNSENT` (初始状态，未打开)        | 此时`xhr`对象被成功构造，`open()`方法还未被调用           |
+| `1`  | `OPENED` (已打开，未发送)         | `open()`方法已被成功调用，`send()`方法还未被调用。注意：只有`xhr`处于`OPENED`状态，才能调用`xhr.setRequestHeader()`和`xhr.send()`,否则会报错 |
+| `2`  | `HEADERS_RECEIVED`(已获取响应头) | `send()`方法已经被调用, 响应头和响应状态已经返回            |
+| `3`  | `LOADING` (正在下载响应体)        | 响应体(`response entity body`)正在下载中，此状态下通过`xhr.response`可能已经有了响应数据 |
+| `4`  | `DONE` (整个数据传输过程结束)        | 整个数据传输过程结束，不管本次请求是成功还是失败                 |
+
+## 6、如何设置请求的超时时间
+
+如果请求过了很久还没有成功，为了不会白白占用网络资源，我们一般会主动终止请求。`XMLHttpRequest`提供了`timeout`属性来允许设置请求的超时时间。
+
+> `xhr.timeout`
+>
+> 单位：milliseconds 毫秒
+>
+> 默认值：`0`，即不设置超时
+
+从**请求开始** 算起，若超过 `timeout` 时间请求还没有结束（包括成功/失败），则会触发ontimeout事件，主动结束该请求。
+
+那么到底什么时候才算是**请求开始** ？
+
+> `xhr.onloadstart` 事件触发的时候，也就是你调用 `xhr.send()`方法的时候。
+>
+> 因为`xhr.open()`只是创建了一个连接，但并没有真正开始数据的传输，而`xhr.send()`才是真正开始了数据的传输过程。只有调用了`xhr.send()`，才会触发`xhr.onloadstart` 。
+
+那么什么时候才算是**请求结束** ？
+
+> `xhr.loadend` 事件触发的时候。
+
+另外，还有2个需要注意的坑儿：
+
+> 1. 可以在 `send()`之后再设置此`xhr.timeout`，但计时起始点仍为调用`xhr.send()`方法的时刻。
+> 2. 当`xhr`为一个`sync`同步请求时，`xhr.timeout`必须置为`0`，否则会抛错。原因可以参考本文的如“何发一个同步请求”一节。
+
+## 7、如何发送一个同步请求
+
+`xhr` 默认发的是异步请求，但也支持发同步请求（当然实际开发中应该尽量避免使用）。到底是异步还是同步请求，由`xhr.open()`传入的`async`参数决定。
+
+> `open(method, url [, async = true [, username = null [, password = null]]])`
+
+- `method`: 请求的方式，如`GET/POST/HEADER`等，这个参数不区分大小写
+- `url`: 请求的地址，可以是相对地址如`example.php`，这个**相对**是相对于当前网页的`url`路径；也可以是绝对地址如`http://www.example.com/example.php`
+- `async`: 默认值为`true`，即为异步请求，若`async=false`，则为同步请求
+
+W3C 的 xhr标准中关于`open()`方法有这样一段说明：
+
+> Throws an "InvalidAccessError" exception if async is false, the JavaScript global environment is a document environment, and either the timeout attribute is not zero, the withCredentials attribute is true, or the responseType attribute is not the empty string.
+
+从上面一段说明可以知道，当`xhr`为同步请求时，有如下限制：
+
+- `xhr.timeout`必须为`0`
+- `xhr.withCredentials`必须为 `false`
+- `xhr.responseType`必须为`""`（注意置为`"text"`也不允许）
+
+若上面任何一个限制不满足，都会抛错，而对于异步请求，则没有这些参数设置上的限制。
+
+之前说过页面中应该尽量避免使用`sync`同步请求，为什么呢？
+因为我们无法设置请求超时时间（`xhr.timeout`为`0`，即不限时）。在不限制超时的情况下，有可能同步请求一直处于`pending`状态，服务端迟迟不返回响应，这样整个页面就会一直阻塞，无法响应用户的其他交互。
+
+另外，标准中并没有提及同步请求时事件触发的限制，但实际开发中确实会遇到部分应该触发的事件并没有触发的现象。如在 chrome中，当`xhr`为同步请求时，在`xhr.readyState`由`2`变成`3`时，并不会触发 `onreadystatechange`事件，`xhr.upload.onprogress`和 `xhr.onprogress`事件也不会触发。
+
+## 8、如何获取上传、下载的进度
+
+在上传或者下载比较大的文件时，实时显示当前的上传、下载进度是很普遍的产品需求。
+我们可以通过`onprogress`事件来实时显示进度，默认情况下这个事件每50ms触发一次。需要注意的是，上传过程和下载过程触发的是不同对象的`onprogress`事件：
+
+- 上传触发的是`xhr.upload`对象的 `onprogress`事件
+- 下载触发的是`xhr`对象的`onprogress`事件
+
+```javascript
+xhr.onprogress = updateProgress;
+xhr.upload.onprogress = updateProgress;
+function updateProgress(event) {
+    if (event.lengthComputable) {
+      var completedPercent = event.loaded / event.total;
+    }
+ }
+```
+
+## 9、可以发送什么类型的数据
+
+> `void send(data);`
+
+*xhr.send(data)*  的参数data可以是以下几种类型：
+
+- `ArrayBuffer`
+- `Blob`
+- `Document`
+- `DOMString`
+- `FormData`
+- `null`
+
+如果是 GET/HEAD请求，*send()* 方法一般不传参或传 `null`。不过即使你真传入了参数，参数也最终被忽略，*xhr.send(data)* 中的data会被置为 `null`.
+
+*xhr.send(data)*  中data参数的数据类型会影响请求头部`content-type`的默认值：
+
+- 如果data是 “Document” 类型，同时也是“HTML Document”类型，则 “content-type” 默认值为 *text/html;charset=UTF-8* ;否则为*application/xml;charset=UTF-8*；
+- 如果data是 “DOMString” 类型，“content-type”默认值为“text/plain;charset=UTF-8”；
+- 如果data是 “FormData” 类型，“content-type”默认值为“multipart/form-data; boundary=[xxx]”
+- 如果data是其他类型，则不会设置“content-type”的默认值
+
+当然这些只是`content-type`的默认值，但如果用*xhr.setRequestHeader()*手动设置了中`content-type`的值，以上默认值就会被覆盖。
+
+另外需要注意的是，若在断网状态下调用 *xhr.send(data)* 方法，则会抛错：`Uncaught NetworkError: Failed to execute 'send' on 'XMLHttpRequest'`。一旦程序抛出错误，如果不 catch 就无法继续执行后面的代码，所以调用 `xhr.send(data)`方法时，应该用 `try-catch`捕捉错误。
+
+```javascript
+try{
+    xhr.send(data)
+}catch(e) {
+    //doSomething...
+};
+```
+
+## 10、`xhr.withCredentials` 与 `CORS` 什么关系
+
+> 我们都知道，在发同域请求时，浏览器会将`cookie`自动加在`request header`中。但大家是否遇到过这样的场景：在发送跨域请求时，`cookie`并没有自动加在`request header`中。
+
+造成这个问题的原因是：在`CORS`标准中做了规定，默认情况下，浏览器在发送跨域请求时，不能发送任何认证信息（`credentials`）如"`cookies`"和"`HTTP authentication schemes`"。除非`xhr.withCredentials`为`true`（`xhr`对象有一个属性叫`withCredentials`，默认值为`false`）。
+
+所以根本原因是`cookies`也是一种认证信息，在跨域请求中，`client`端必须手动设置`xhr.withCredentials=true`，且`server`端也必须允许`request`能携带认证信息（即`response header`中包含`Access-Control-Allow-Credentials:true`），这样浏览器才会自动将`cookie`加在`request header`中。
+
+另外，要特别注意一点，一旦跨域`request`能够携带认证信息，`server`端一定不能将`Access-Control-Allow-Origin`设置为`*`，而必须设置为请求页面的域名。
+
+# # XMLHttpRequest 相关事件
+
+## 1、事件分类
+
+xhr 相关事件有很多，有时记起来还挺容易混乱。但当你了解了具体代码实现后，就容易理清楚了。下面是`XMLHttpRequest`的部分实现代码：
+
+```javascript
+interface XMLHttpRequestEventTarget : EventTarget {
+  // event handlers
+  attribute EventHandler onloadstart;
+  attribute EventHandler onprogress;
+  attribute EventHandler onabort;
+  attribute EventHandler onerror;
+  attribute EventHandler onload;
+  attribute EventHandler ontimeout;
+  attribute EventHandler onloadend;
+};
+
+interface XMLHttpRequestUpload : XMLHttpRequestEventTarget {
+
+};
+
+interface XMLHttpRequest : XMLHttpRequestEventTarget {
+  // event handler
+  attribute EventHandler onreadystatechange;
+  readonly attribute XMLHttpRequestUpload upload;
+};
+```
+
+从代码中我们可以看出：
+
+1. XMLHttpRequestEventTarget 接口定义了7个事件：
+   - `onloadstart`
+   - `onprogress`
+   - `onabort`
+   - `ontimeout`
+   - `onerror`
+   - `onload`
+   - `onloadend`
+2. 每一个XMLHttpRequest里面都有一个`upload`属性，而`upload`是一个*XMLHttpRequestUpload*对象
+3. XMLHttpRequest和XMLHttpRequestUpload都继承了同一个XMLHttpRequestEventTarget接口，所以`xhr`和`xhr.upload`都有第一条列举的7个事件
+4. `onreadystatechange`是`XMLHttpRequest`独有的事件
+
+所以这么一看就很清晰了：
+`xhr`一共有8个相关事件：7个`XMLHttpRequestEventTarget`事件+1个独有的`onreadystatechange`事件；而`xhr.upload`只有7个`XMLHttpRequestEventTarget`事件。
+
+## 2、事件触发条件
+
+下面整理了一张`xhr`相关事件触发条件表，其中最需要注意的是 `onerror` 事件的触发条件。
+
+| 事件                   | 触发条件                                     |
+| -------------------- | ---------------------------------------- |
+| `onreadystatechange` | 每当`xhr.readyState`改变时触发；但`xhr.readyState`由非`0`值变为`0`时不触发。 |
+| `onloadstart`        | 调用`xhr.send()`方法后立即触发，若`xhr.send()`未被调用则不会触发此事件。 |
+| `onprogress`         | `xhr.upload.onprogress`在上传阶段(即`xhr.send()`之后，`xhr.readystate=2`之前)触发，每50ms触发一次；`xhr.onprogress`在下载阶段（即`xhr.readystate=3`时）触发，每50ms触发一次。 |
+| `onload`             | 当请求成功完成时触发，此时`xhr.readystate=4`          |
+| `onloadend`          | 当请求结束（包括请求成功和请求失败）时触发                    |
+| `onabort`            | 当调用`xhr.abort()`后触发                      |
+| `ontimeout`          | `xhr.timeout`不等于0，由请求开始即`onloadstart`开始算起，当到达`xhr.timeout`所设置时间请求还未结束即`onloadend`，则触发此事件。 |
+| `onerror`            | 在请求过程中，若发生`Network error`则会触发此事件（若发生`Network error`时，上传还没有结束，则会先触发`xhr.upload.onerror`，再触发`xhr.onerror`；若发生`Network error`时，上传已经结束，则只会触发`xhr.onerror`）。**注意**，只有发生了网络层级别的异常才会触发此事件，对于应用层级别的异常，如响应返回的`xhr.statusCode`是`4xx`时，并不属于`Network error`，所以不会触发`onerror`事件，而是会触发`onload`事件。 |
+
+## 3、事件触发顺序
+
+当请求一切正常时，相关的事件触发顺序如下：
+
+1. 触发`xhr.onreadystatechange`(之后每次`readyState`变化时，都会触发一次)
+2. 触发`xhr.onloadstart`
+   //上传阶段开始：
+3. 触发`xhr.upload.onloadstart`
+4. 触发`xhr.upload.onprogress`
+5. 触发`xhr.upload.onload`
+6. 触发`xhr.upload.onloadend`
+   //上传结束，下载阶段开始：
+7. 触发`xhr.onprogress`
+8. 触发`xhr.onload`
+9. 触发`xhr.onloadend`
+
+> 发生`abort`/`timeout`/`error`异常的处理
+
+在请求的过程中，有可能发生 `abort`/`timeout`/`error`这3种异常。那么一旦发生这些异常，`xhr`后续会进行哪些处理呢？后续处理如下：
+
+1. 一旦发生`abort`或`timeout`或`error`异常，先立即中止当前请求
+2. 将 `readystate` 置为`4`，并触发 `xhr.onreadystatechange`事件
+3. 如果上传阶段还没有结束，则依次触发以下事件：
+   - `xhr.upload.onprogress`
+   - `xhr.upload.[onabort或ontimeout或onerror]`
+   - `xhr.upload.onloadend`
+4. 触发 `xhr.onprogress`事件
+5. 触发 `xhr.[onabort或ontimeout或onerror]`事件
+6. 触发`xhr.onloadend` 事件
+
+> 在哪个`xhr`事件中注册成功回调？
+
+从上面介绍的事件中，可以知道若`xhr`请求成功，就会触发`xhr.onreadystatechange`和`xhr.onload`两个事件。 那么我们到底要将成功回调注册在哪个事件中呢？我倾向于 `xhr.onload`事件，因为`xhr.onreadystatechange`是每次`xhr.readyState`变化时都会触发，而不是`xhr.readyState=4`时才触发。
+
+- 0：请求未初始化（还没有调用 open()）。
+- 1：请求已经建立，但是还没有发送（还没有调用 send()）。
+- 2：请求已发送，正在处理中（通常现在可以从响应中获取内容头）。
+- 3：请求在处理中；通常响应中已有部分数据可用了，但是服务器还没有完成响应的生成。
+- 4：响应已完成；您可以获取并使用服务器的响应了
+
+```javascript
+xhr.onload = function () {
+    //如果请求成功
+    if(xhr.status == 200){
+      //do successCallback
+    }
+  }
+```
+
+上面的示例代码是很常见的写法：先判断`http`状态码是否是`200`，如果是，则认为请求是成功的，接着执行成功回调。这样的判断是有坑儿的，比如当返回的`http`状态码不是`200`，而是`201`时，请求虽然也是成功的，但并没有执行成功回调逻辑。所以更靠谱的判断方法应该是：当`http`状态码为`2xx`或`304`时才认为成功。
+
+```javascript
+  xhr.onload = function () {
+    //如果请求成功
+    if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+      //do successCallback
+    }
+  }
 ```
 
 # # XML 格式
@@ -360,9 +657,46 @@ json 跨域简单实现只需要在 $.ajax() 中 配置 dataType 为 jsonp即可
 
 当我们从一个域向另外一个域发起请求的时候，如果我们希望浏览器允许我们把这个请求进行接收和处理，那另一个域的响应数据里就一定要包含一个允许的标志（`Access-Control-Allow-Origin`），这个标志就是响应的一个头，同时这个标志的值就是我们发起请求域的名称。
 
+# # 拓展
 
+## 1、创建 XMLHttpRequest 请求
 
+老版本的 `Internet Explorer`（IE5 和 IE6）使用`ActiveX` 对象：
 
+```javascript
+var xhr = new ActiveXObject("Microsoft.XMLHTTP");
+```
 
+为了应对所有的现代浏览器，包括 `IE5` 和 `IE6`，请检查浏览器是否支持 `XMLHttpRequest`对象。如果支持，则创建`XMLHttpRequest`对象。如果不支持，则创建`ActiveXObject`：
 
+兼容各个浏览器的创建`Ajax`的工具函数：
 
+```javascript
+function createRequest() {
+    var xhr = null;
+    try  {
+        xhr = new XMLHttpRequest();
+    }catch(err) {
+        try {
+            xhr = new ActiveXObject("Msxm12.XMLHTTP");
+        }catch(err) {
+            try {
+                xhr = new ActiveXObject("Microsoft.XMLHTTP");
+            }catch(err) {
+                xhr = null;
+            }
+        }
+    }
+    return xhr;
+}
+```
+
+## 2、资料
+
+- 想真正搞懂`XMLHttpRequest`，最靠谱的方法还是看 [W3C的xhr 标准](https://www.w3.org/TR/XMLHttpRequest/);
+- 想结合代码学习如何用`XMLHttpRequest`发各种类型的数据，可以参考[html5rocks上的这篇文章](http://www.html5rocks.com/zh/tutorials/file/xhr2/)
+- 想粗略的了解`XMLHttpRequest`的基本使用，可以参考[MDN的XMLHttpRequest介绍](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest)；
+- 想了解`XMLHttpRequest` 的发展历程，可以参考[阮老师的文章](http://www.ruanyifeng.com/blog/2012/09/xmlhttprequest_level_2.html)；
+- 想了解`Ajax`的基本介绍，可以参考[AJAX Tutorial](http://www.tutorialspoint.com/ajax/index.htm);
+- 想了解跨域请求，则可以参考[W3C的 cors 标准](https://www.w3.org/TR/cors/);
+- 想了解`http`协议，则可以参考[HTTP Tutorial](http://www.tutorialspoint.com/http/http_header_fields.htm);
