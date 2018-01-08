@@ -3,10 +3,18 @@
 
 $(function () {
 
+	/**
+	 *
+	 *  获取豆瓣网api
+	 *  1. 进入豆瓣网 https://book.douban.com/
+	 *  2. 随便点一本书进去获取网址中的书本id https://book.douban.com/subject/27199630/?icn=index-editionrecommend
+	 *     地址中 27199630 为书本id
+	 *  3. 然后将id拼接在api地址 “https://api.douban.com/v2/book/” 后面即可
+	 */
+
     let urls = [
         "http://v.juhe.cn/weather/index?format=2&cityname=%E8%8B%8F%E5%B7%9E&key=11244bdbf1d1be26af6e8fac074a2577",
         "https://api.douban.com/v2/book/27199630",
-        "https://lihongyao.github.io/ajax/test.php"
     ];
 
 
@@ -15,7 +23,7 @@ $(function () {
      */
     $(".btn").eq(0).on("click", function () {
         $.ajax({
-            url: urls[2],
+            url: urls[1],
             type: "GET",
             async: "true",
             dataType: "jsonp",
@@ -26,18 +34,6 @@ $(function () {
     });
 
 
-    /**
-     * 2. cros
-     */
-    $(".btn").eq(1).on("click", function () {
-        $.ajax({
-            url: "https://api.douban.com/v2/book/27199630",
-            type: "GET",
-            success: function (response) {
-                console.log(response);
-            }
-        });
-    });
 });
 
 
