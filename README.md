@@ -650,7 +650,133 @@ https://jsonlint.com/
 
 jsonp 跨域本质并不是ajax，只是执行了跨域js，html中，所有带`src`属性的标签都可以跨域，如 \<script>、\<img>、\<iframe>，所以，可以通过 \<script> 加载其他域的一段动态脚本，这段脚本包含了想要的数据信息。
 
-json 跨域简单实现只需要在 $.ajax() 中 配置 dataType 为 jsonp即可。
+> \> jsonp 跨域原理
+
+我们知道，使用 [XMLHTTPRequest](http://www.w3school.com.cn/ajax/ajax_xmlhttprequest_send.asp) 对象发送HTTP请求时，会遇到 [同源策略](http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html) 问题，域不同请求会被浏览器拦截。
+
+那么是否有方法能绕过 XMLHTTPRequest 对象进行HTTP跨域请求呢？
+
+换句话说，不使用 XMLHTTPRequest 对象是否可以发送跨域HTTP请求呢？
+
+细心的你可能会发现，像诸如：
+
+```html
+<script type="text/javascript" src="http://www.a.com/scripts/1.js"></script>
+
+<img src="http://www.b.com/images/1.jpg" />
+
+<link rel="stylesheet" href="http://www.c.com/assets/css/1.css" />
+```
+
+这种标签是不会遇到"跨域"问题的，严格意义上讲，这不是跨域，跨域是指在脚本代码中向非同源域发送HTTP请求，这只是跨站资源请求。
+
+那么，我们是否可以利用跨站资源请求这一方式来实现跨域HTTP请求呢？
+
+以\<script>\</script>标签为例进行探索，先看一段代码：
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>jsonp demo</title>
+  
+    <!-- JavaScript片断1 -->
+    <script type="text/javascript">
+        function handler(data) {
+            alert(data);
+            // our code here...
+        }
+    </script>
+ 
+    <!-- JavaScript片断2 -->
+    <script type="text/javascript">
+        handler('success');
+    </script>
+</head>
+<body>
+    A JSONP demo.
+</body>
+</html>
+```
+
+这段代码中，有2个JavaScript片断，第1个片断中定义了一个处理函数handler()，这个处理函数比较简单，没有对数据做任何处理，只是把它alert出来；第2个片断调用了它，运行这个页面浏览器会弹出"success"。
+
+我们假设第2个JavaScript片断存储在别的地方，然后我们使用\<script src="" />的方式把它引入进来，像这样：
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>jsonp demo</title>
+    <!-- JavaScript片断1 -->
+    <script type="text/javascript">
+        function handler(data) {
+            alert(data);
+            // our code here...
+        }
+    </script>
+ 
+    <!-- JavaScript片断2 -->
+    <script type="text/javascript" src="https://lihongyao.github.io/ajax/test.js"></script>
+</head>
+<body>
+    A JSONP demo.
+</body>
+</html>
+```
+
+*lihongyao.github.io/ajax/test.js* 文件
+
+```javascript
+var obj = {
+	"status": 200,
+	"info": {
+		"username":"admin",
+		"password":"123"
+	},
+	"message": "success"
+}
+
+handler(JSON.stringify(obj));
+```
+
+这种方法和把JavaScript代码直接写在页面是等效的，但是，我们由此可以联想到什么？
+
+我们是否可以事先在本页面定义处理程序，服务端返回JS脚本，脚本的内容就是对处理程序的回调，服务返回的数据通过参数的形式传回：
+
+```javascript
+handler('服务返回的数据');
+```
+
+然后通过动态向当前页面head节点添加\<script src="服务地址">\</script>节点的方式来“伪造”HTTP请求？
+
+这就是 jsonp 请求实现的基本原理，由于我们没有学习服务器知识，所以我们只是简单介绍下其原理，在实际开发中，可与后台交流，在后台调用该方法，一般情况下，后台会对 jsonp 请求做特殊处理，比如，我们知道一个页面，可能会有多个http请求及相关处理方法，后台如何知道对应的处理方法并调用呢？这个我们不用担心，交由后台处理，我们只需要在进行请求的时候，绑定对应的处理方法即可，如何绑定呢？只需要给\<script>标签的src属性中的URL添加一个参数来指定回调函数的名称就可以了：
+
+```html
+<!--callback 指定回调函数名称-->
+<script type="text/javascript" src="服务器地址?callback=handler"></script>
+```
+
+另外，在通过 jsonp 进行跨域请求的时候，我们应该选择动态生成 \<script> 标签并设置 `src` 属性。
+
+> \> jQuery jsonp
+
+jQuery的ajax方法对jsonp式跨域进行了封装，如果使用jQuery进行JSONP原理式的跨域HTTP请求，将会变得非常简单：只需要在 $.ajax() 中 配置 `dataType` 为 `jsonp` 即可。
+
+jQuery为我们封装好了回调函数，一般情况下不需要我们单独去写，如果你不想在success中处理，想单独写处理函数，那么可以通过设置这2个参数来实现：
+
+- `jsonp: "callback"`：传递给服务端的回调函数名称参数，如果不设置此项，则默认是"callback"
+- `jsonpCallback: "handler"`：传递给服务端的回调函数名称，如果不设置此项，则默认是形如"jQuery111007837897759742043_1460657212499"的由jQuery自动生成的函数名称
+
+必须要强调的是：
+
+1）、JSONP虽然看起来很像一般的ajax请求，但其原理不同，jsonp 是通过 \<script>标签的动态加载来实现的跨域请求，而一般的ajax请求是通过XMLHttpRequest对象进行；
+
+2）、JSONP不是一种标准协议，其安全性和稳定性都不如 W3C 推荐的 [CORS](http://www.cnblogs.com/choon/p/5386150.html)；
+
+3）、JSONP不支持POST请求，即使把请求类型设置为post，其本质上仍然是一个get请求。
 
 ## 3、cors 
 

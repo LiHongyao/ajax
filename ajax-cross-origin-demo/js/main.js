@@ -1,6 +1,4 @@
 
-
-
 $(function () {
 
 	/**
@@ -26,8 +24,11 @@ $(function () {
             url: urls[1],
             type: "GET",
             async: "true",
-            dataType: "jsonp",
+            dataType: "jsonp", // 指定服务器返回的数据类型
+            // jsonp: "callBack", // 指定参数名称
+            // jsonpCallback: "getData", // 指定回调函数名称
             success: function (response) {
+                console.clear();
                 console.log(response);
             }
         });
