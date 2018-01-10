@@ -158,12 +158,12 @@ function sendAjax() {
   xhr.timeout = 3000;
   // 3. 设置响应返回的数据格式
   xhr.responseType = "json";
-  // 4. 创建一个 post 请求，采用异步
+  // 4. 创建一个 GET 请求，采用异步
   xhr.open('GET', 'json/goods.json', true);
   // 5. 注册相关事件回调处理函数
   xhr.onload = function(e) { 
     if(this.status == 200|| this.status == 304){
-        alert(this.responseText);
+        alert(this.response);
     }
   };
   xhr.ontimeout = function(e) { ... };
@@ -616,17 +616,17 @@ https://jsonlint.com/
 
 # # jQuery 中的AJAX
 
-## 1、$.get()
+## 1、$.get(url, [data], [fn], [type])
 
-## 2、$.getJSON()
+## 2、$.getJSON(url, [data], [fn])
 
-## 3、$.getScript()
+## 3、$.getScript(url, [callback])
 
-## 4、$.post()
+## 4、$.post(url, [data], [fn], [type])
 
-## 5、$.ajax()
+## 5、$.ajax(url, [settings])
 
-> [$.ajax() 参数详解](https://github.com/LiHongyao/Blogs/issues/8)
+> [$.ajax() 参数详解](http://jquery.cuishifeng.cn/jQuery.Ajax.html)
 
 # # 跨域
 
@@ -646,7 +646,7 @@ https://jsonlint.com/
 
 ## 2、jsonp 
 
-首先我们要思考一个问题，我们需要发起一个跨域的ajax请求，其中最本质的需求是我们需要与另外一个与另外一个域进行交互，来完成数据的传递。那既然是不允许跨域的ajax请求，那我们可以变一个方法，用其他的可以实现跨域的途径能够完成数据的传递，这样就可以完成我们本质的需求。
+首先我们要思考一个问题，我们需要发起一个跨域的ajax请求，其中最本质的需求是我们需要与另外一个域进行交互，来完成数据的传递。那既然是不允许跨域的ajax请求，那我们可以变一个方法，用其他的可以实现跨域的途径能够完成数据的传递，这样就可以完成我们本质的需求。
 
 jsonp 跨域本质并不是ajax，只是执行了跨域js，html中，所有带`src`属性的标签都可以跨域，如 \<script>、\<img>、\<iframe>，所以，可以通过 \<script> 加载其他域的一段动态脚本，这段脚本包含了想要的数据信息。
 
@@ -825,3 +825,6 @@ function createRequest() {
 - 想了解`Ajax`的基本介绍，可以参考[AJAX Tutorial](http://www.tutorialspoint.com/ajax/index.htm);
 - 想了解跨域请求，则可以参考[W3C的 cors 标准](https://www.w3.org/TR/cors/);
 - 想了解`http`协议，则可以参考[HTTP Tutorial](http://www.tutorialspoint.com/http/http_header_fields.htm);
+
+
+

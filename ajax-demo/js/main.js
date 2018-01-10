@@ -5,7 +5,6 @@
 
 $(function () {
 
-    let $content = $(".content");
 
     /**
      * 1、XMLHttpRequest
@@ -22,7 +21,7 @@ $(function () {
             xhr.onreadystatechange = function () {
                 if(xhr.readyState == 4 && xhr.status == 200 ) {
                     let htmlStr = xhr.responseText;
-                    $content.html(htmlStr);
+                    $(".content").html(htmlStr);
                 }
             };
         });
@@ -35,7 +34,7 @@ $(function () {
         $("li").eq(1).on("click", function () {
             $.get("data/info.txt", function (response, status) {
                 if(status == "success") {
-                    $content.html(response);
+                    $(".content").html(response);
                 }
             }, "text");
         });
@@ -49,7 +48,7 @@ $(function () {
             $.getJSON("data/role.json", function (response, status) {
                 if (status == "success") {
                     let role = response;
-                    $content.html(`
+                    $(".content").html(`
                         <h1>王者荣耀角色信息</h1>
                         <p>
                             <b>角色：</b>
@@ -121,7 +120,7 @@ $(function () {
                     htmlStr += "<p>年龄：<span>" + $(xml).find("age").text() +"</span></p>";
                     htmlStr += "<p>职业：<span>" + $(xml).find("profession").text() +"</span></p>";
                     htmlStr += "<p>地址：<span>" + $(xml).find("address").text() +"</span></p>";
-                    $content.html(htmlStr);
+                    $(".content").html(htmlStr);
                 }
 
             }, "xml");
@@ -141,7 +140,7 @@ $(function () {
                 async: true,
                 dataType: "html",
                 success: function (response) {
-                    $content.html(response);
+                    $(".content").html(response);
                 },
                 error: function (jqXHR, textStatus) {
                     console.log(textStatus);
