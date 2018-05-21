@@ -1,7 +1,5 @@
 # # AJAX 概述
 
-## 1、简述
-
 AJAX(Asynchronous Javascript And XML)
 
 - Asynchronous：浏览器支持异步通信模式，实现页面局部刷新。
@@ -10,29 +8,6 @@ AJAX(Asynchronous Javascript And XML)
 - XML：通信数据的承载方式，但实际很少使用XML格式
 
 > 相关技术：JavaScript、XML（JSON）、DOM操作
-
-## 2、优势
-
-- 页面无刷新，用户体验好。
-- 异步通信，更加快的响应能力。
-- 减少冗余请求，减轻了服务器负担
-- 基于标准化的并被广泛支持的技术，不需要下载插件或者小程序
-
-## 3、缺点
-
-- `ajax` 干掉了 `back` 按钮，即对浏览器后退机制的破坏。
-- 存在一定的安全问题。
-- 对搜索引擎的支持比较弱。
-- 破坏了程序的异常机制。
-- 无法用`URL`直接访问
-
-## 4、应用场景
-
-- 场景 1. 数据验证
-
-- 场景 2. 按需取数据
-
-- 场景 3. 自动更新页面
 
 # # 相关知识点
 
@@ -43,9 +18,8 @@ AJAX(Asynchronous Javascript And XML)
 
 ## 2、GET & POST
 
-> **GET**：一般用于信息获取，使用URL传递参数，对所发送信息的数量也有限制，一般在2000个字符。
-
-> **POST**：一般用于修改服务器上的资源，对所发送信息的数量无限制。
+- GET：一般用于信息获取，请求参数拼接在地址后，不安全，速度快。
+- POST：一般用于修改服务器上的资源，请求参数打包在请求报文中，安全，速度慢。
 
 ## 3、HTTP请求
 
@@ -158,7 +132,7 @@ function sendAjax() {
   xhr.timeout = 3000;
   // 3. 设置响应返回的数据格式
   xhr.responseType = "json";
-  // 4. 创建一个 GET 请求，采用异步
+// 4. 创建一个 GET 请求，采用异步
   xhr.open('GET', 'json/goods.json', true);
   // 5. 注册相关事件回调处理函数
   xhr.onload = function(e) { 
