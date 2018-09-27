@@ -792,6 +792,9 @@ function createRequest() {
 
 ## 2、资料
 
+- 免费数据接口：http://www.360doc.com/content/16/1219/15/35284624_616014107.shtml
+
+
 - 想真正搞懂`XMLHttpRequest`，最靠谱的方法还是看 [W3C的xhr 标准](https://www.w3.org/TR/XMLHttpRequest/);
 - 想结合代码学习如何用`XMLHttpRequest`发各种类型的数据，可以参考[html5rocks上的这篇文章](http://www.html5rocks.com/zh/tutorials/file/xhr2/)
 - 想粗略的了解`XMLHttpRequest`的基本使用，可以参考[MDN的XMLHttpRequest介绍](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest)；
