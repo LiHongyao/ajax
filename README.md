@@ -774,52 +774,17 @@ jQuery为我们封装好了回调函数，一般情况下不需要我们单独�
 
 当我们从一个域向另外一个域发起请求的时候，如果我们希望浏览器允许我们把这个请求进行接收和处理，那另一个域的响应数据里就一定要包含一个允许的标志（`Access-Control-Allow-Origin`），这个标志就是响应的一个头，同时这个标志的值就是我们发起请求域的名称。
 
-# # 拓展
+# # 后序
 
-## 1、创建 XMLHttpRequest 请求
+## 1. API 资源
 
-老版本的 `Internet Explorer`（IE5 和 IE6）使用`ActiveX` 对象：
+- https://www.showapi.com/
+- https://www.juhe.cn/
+- http://www.datasl.com//view/main/index.jsp
+- http://www.bejson.com/knownjson/webInterface/
+- http://www.mob.com/product/api/
+- https://www.idataapi.cn/
 
-```javascript
-var xhr = new ActiveXObject("Microsoft.XMLHTTP");
-```
-
-为了应对所有的现代浏览器，包括 `IE5` 和 `IE6`，请检查浏览器是否支持 `XMLHttpRequest`对象。如果支持，则创建`XMLHttpRequest`对象。如果不支持，则创建`ActiveXObject`：
-
-兼容各个浏览器的创建`Ajax`的工具函数：
-
-```javascript
-function createRequest() {
-    var xhr = null;
-    try  {
-        xhr = new XMLHttpRequest();
-    }catch(err) {
-        try {
-            xhr = new ActiveXObject("Msxm12.XMLHTTP");
-        }catch(err) {
-            try {
-                xhr = new ActiveXObject("Microsoft.XMLHTTP");
-            }catch(err) {
-                xhr = null;
-            }
-        }
-    }
-    return xhr;
-}
-```
-
-## 2、资料
-
-- 免费数据接口：http://www.360doc.com/content/16/1219/15/35284624_616014107.shtml
-
-
-- 想真正搞懂`XMLHttpRequest`，最靠谱的方法还是看 [W3C的xhr 标准](https://www.w3.org/TR/XMLHttpRequest/);
-- 想结合代码学习如何用`XMLHttpRequest`发各种类型的数据，可以参考[html5rocks上的这篇文章](http://www.html5rocks.com/zh/tutorials/file/xhr2/)
-- 想粗略的了解`XMLHttpRequest`的基本使用，可以参考[MDN的XMLHttpRequest介绍](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest)；
-- 想了解`XMLHttpRequest` 的发展历程，可以参考[阮老师的文章](http://www.ruanyifeng.com/blog/2012/09/xmlhttprequest_level_2.html)；
-- 想了解`Ajax`的基本介绍，可以参考[AJAX Tutorial](http://www.tutorialspoint.com/ajax/index.htm);
-- 想了解跨域请求，则可以参考[W3C的 cors 标准](https://www.w3.org/TR/cors/);
-- 想了解`http`协议，则可以参考[HTTP Tutorial](http://www.tutorialspoint.com/http/http_header_fields.htm);
 
 
 
