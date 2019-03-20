@@ -9,14 +9,14 @@ AJAX(Asynchronous Javascript And XML)
 
 > 相关技术：JavaScript、XML（JSON）、DOM操作
 
-# # 相关知识点
+# # 相关知识点 *
 
 ## 1、同步异步
 
 - 同步：主线程执行，客户端发起请求->服务器响应->页面加载，阻塞线程。
 - 异步：后台执行，客户端发起请求->服务器响应->页面加载同时执行。
 
-## 2、GET & POST
+## 2、GET、POST
 
 - GET：一般用于信息获取，请求参数拼接在地址后，不安全，速度快。
 - POST：一般用于修改服务器上的资源，请求参数打包在请求报文中，安全，速度慢。
@@ -125,33 +125,24 @@ XMLHttpRequest 一开始只是微软浏览器提供的一个接口，后来各�
 我们先来看一下 XMLHttpRequest 发送 Ajax 请求的简单示例代码。
 
 ```javascript
-function sendAjax() {
-  // 1. 创建xhr对象 
-  var xhr = new XMLHttpRequest();
-  // 2. 设置xhr请求的超时时间
-  xhr.timeout = 3000;
-  // 3. 设置响应返回的数据格式
-  xhr.responseType = "json";
-// 4. 创建一个 GET 请求，采用异步
-  xhr.open('GET', 'json/goods.json', true);
-  // 5. 注册相关事件回调处理函数
-  xhr.onload = function(e) { 
-    if(this.status == 200|| this.status == 304){
-        alert(this.response);
-    }
-  };
-  xhr.ontimeout = function(e) { ... };
-  xhr.onerror = function(e) { ... };
-  xhr.upload.onprogress = function(e) { ... };
-  
-  // 6. 发送数据
-  xhr.send(null);
+// 1. 创建请求对象
+var xhr = new XMLHttpRequest();
+// 2. 配置请求
+var url = "http://47.107.149.71:8081/api/financial?address=成都";
+xhr.timeout = 10000;
+xhr.responseType = "json";
+xhr.open("GET", url, true);
+// 3. 发送请求
+xhr.send(null);
+// 4. 监听请求
+xhr.onload = function() {
+    console.log(this.response);
 }
 ```
 
 接下来，我们将以问题的形式详细介绍`xhr`的基本使用。
 
-## 1、如何设置request header?
+## 1、如何设置request header? *
 
 在发送 Ajax 请求（实质是一个[HTTP](http://www.tutorialspoint.com/http/http_header_fields.htm)请求）时，我们可能需要设置一些请求头部信息，比如 `content-type`、`connection`、`cookie`、`accept-xxx` 等。xhr 提供了`setRequestHeader`来允许我们修改请求 header。
 
@@ -161,18 +152,27 @@ function sendAjax() {
 
 注意点：
 
-- 方法的第一个参数 header 大小写不敏感，即可以写成 *content-type* ，也可以写成*Content-Type*，甚至写成*content-Type*;
+- 方法的第一个参数 header 大小写不敏感，即可以写成 *content-type* ，也可以写成*Content-Type*，甚至写成 *content-Type*;
 - *Content-Type* 的默认值与具体发送的数据类型有关
 - *setRequestHeader* 必须在*open()*方法之后，*send()* 方法之前调用，否则会抛错；
 - *setRequestHeader* 可以调用多次，最终的值不会采用覆盖 `override` 的方式，而是采用追加 `append` 的方式。下面是一个示例代码：
 
 ```javascript
+// 1. 创建请求对象
 var xhr = new XMLHttpRequest();
-xhr.open('GET', 'demo.json');
-xhr.setRequestHeader('X-Test', 'one');
-xhr.setRequestHeader('X-Test', 'two');
-// 最终request header中"X-Test"为: one, two
-xhr.send();
+// 2. 配置请求
+var url = "http://47.107.149.71:8081/api/my/info";
+xhr.responseType = "json";
+xhr.open("GET", url, true);
+// 3. 设置头部参数
+xhr.setRequestHeader("Authorization", "");
+xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+// 4. 发送请求
+xhr.send(null);
+// 5. 监听请求
+xhr.onload = function() {
+    console.log(this.response);
+}  
 ```
 
 ## 2、如何获取response header?
@@ -199,43 +199,28 @@ xhr 提供了2个用来获取响应头部的方法：
 >
 > b. *Access-Control-Expose-Headers*：首先得注意是"*Access-Control-Expose-Headers*"进行**跨域请求**时响应头部中的一个字段，对于同域请求，响应头部是没有这个字段的。这个字段中列举的 header 字段就是服务器允许暴露给客户端访问的字段。
 
-所以 *getAllResponseHeaders()*  只能拿到**限制以外**（即被视为`safe`）的header字段，而不是全部字段；而调用 *getResponseHeader(header)* 方法时，`header` 参数必须是**限制以外**的header字段，否则调用就会报`Refused to get unsafe header` 的错误。
+所以  *getAllResponseHeaders()*  只能拿到**限制以外**（即被视为`safe`）的header字段，而不是全部字段；而调用 *getResponseHeader(header)* 方法时，`header` 参数必须是**限制以外**的header字段，否则调用就会报`Refused to get unsafe header` 的错误。
 
-## 3、如何指定 xhr.response 的数据类型?
+## 3、如何设置响应数据类型? *
 
 有些时候我们希望 *xhr.response*  返回的就是我们想要的数据类型。比如：响应返回的数据是纯JSON字符串，但我们期望最终通过 *xhr.response*  拿到的直接就是一个 js 对象，我们该怎么实现呢？我们可以通过 *level 2*  提供的 *xhr.responseType*  属性实现。
 
 `responseType` 可设置的格式如下：
 
-| 值               | `xhr.response` 数据类型 | 说明                       |
-| --------------- | ------------------- | ------------------------ |
-| `""`            | `String` 字符串        | 默认值(在不设置`responseType`时) |
-| `"text"`        | `String` 字符串        |                          |
-| `"document"`    | `Document` 对象       | 希望返回 `XML` 格式数据时使用       |
-| `"json"`        | `javascript` 对象     | 存在兼容性问题，IE10/IE11不支持     |
-| `"blob"`        | `Blob` 对象           |                          |
-| `"arrayBuffer"` | `ArrayBuffer` 对象    |                          |
+| 值              | `xhr.response` 数据类型 | 说明                             |
+| --------------- | ----------------------- | -------------------------------- |
+| `""`            | `String` 字符串         | 默认值(在不设置`responseType`时) |
+| `"text"`        | `String` 字符串         |                                  |
+| `"document"`    | `Document` 对象         | 希望返回 `XML` 格式数据时使用    |
+| `"json" `       | `javascript` 对象       | 存在兼容性问题，IE10/IE11不支持  |
+| `"blob"`        | `Blob` 对象             |                                  |
+| `"arrayBuffer"` | `ArrayBuffer` 对象      |                                  |
 
-以下是一个请求json的示例：
-
-```javascript
-var xhr = new XMLHttpRequest();
-xhr.open('GET', 'json/sale.json', true);
-xhr.responseType = 'json';
-xhr.onload = function(e) {
-    if (this.status == 200) {
-        var obj = this.response;
-        console.log(obj);
-    }
-};
-xhr.send();
-```
-
-## 4、如何获取response数据 ?
+## 4、如何获取响应数据 ? *
 
 xhr 提供了3个属性来获取请求返回的数据
 
-- `xhr.response`
+- `xhr.response` *
   - 默认值：空字符串 `""`
   - 当请求完成时，此属性才有正确的值
   - 请求未完成时，此属性的值可能是`""`或者 `null`，具体与 *xhr.responseType*有关：当*responseType* 为`""`或`"text"`时，值为`""`；`responseType`为其他值时，值为 `null`
@@ -252,7 +237,7 @@ xhr 提供了3个属性来获取请求返回的数据
 
 在发一个 ajax 请求后，如果想追踪请求当前处于哪种状态，该怎么做呢？
 
-用 `xhr.readyState` 这个属性即可追踪到。这个属性是只读属性，总共有5种可能值，分别对应 xhr 不同的不同阶段。每次 *xhr.readyState* 的值发生变化时，都会触发 *xhr.onreadystatechange* 事件，我们可以在这个事件中进行相关状态判断。
+用 `xhr.readyState` 这个属性即可追踪到。这个属性是只读属性，总共有5种可能值，分别对应 xhr 不同阶段。每次 *xhr.readyState* 的值发生变化时，都会触发 *xhr.onreadystatechange* 事件，我们可以在这个事件中进行相关状态判断。
 
 ```javascript
 xhr.onreadystatechange = function () {
@@ -281,7 +266,7 @@ xhr.onreadystatechange = function () {
 | `3`  | `LOADING` (正在下载响应体)        | 响应体(`response entity body`)正在下载中，此状态下通过`xhr.response`可能已经有了响应数据 |
 | `4`  | `DONE` (整个数据传输过程结束)        | 整个数据传输过程结束，不管本次请求是成功还是失败                 |
 
-## 6、如何设置请求的超时时间?
+## 6、如何设置请求的超时时间? *
 
 如果请求过了很久还没有成功，为了不会白白占用网络资源，我们一般会主动终止请求。*XMLHttpRequest* 提供了`timeout` 属性来允许设置请求的超时时间。
 
@@ -308,7 +293,7 @@ xhr.onreadystatechange = function () {
 > 1. 可以在 `send()`之后再设置此`xhr.timeout`，但计时起始点仍为调用`xhr.send()`方法的时刻。
 > 2. 当 xhr为一个 `sync` 同步请求时，`xhr.timeout`必须置为`0`，否则会抛错。原因可以参考本文的如“何发一个同步请求”一节。
 
-## 7、如何发送一个同步请求?
+## 7、如何发送一个同步请求? *
 
 xhr  默认发的是异步请求，但也支持发同步请求（当然实际开发中应该尽量避免使用）。到底是异步还是同步请求，由 *xhr.open()* 传入的 *async* 参数决定。
 
@@ -344,7 +329,7 @@ W3C 的 xhr标准中关于`open()`方法有这样一段说明：
 - 下载触发的是`xhr`对象的`onprogress`事件
 
 ```javascript
-xhr.onprogress = updateProgress;
+xhr.onprogress        = updateProgress;
 xhr.upload.onprogress = updateProgress;
 function updateProgress(event) {
     if (event.lengthComputable) {
@@ -375,7 +360,7 @@ function updateProgress(event) {
 - 如果data是 “FormData” 类型，“content-type”默认值为“multipart/form-data; boundary=[xxx]”
 - 如果data是其他类型，则不会设置“content-type”的默认值
 
-当然这些只是`content-type`的默认值，但如果用*xhr.setRequestHeader()*手动设置了中`content-type`的值，以上默认值就会被覆盖。
+当然这些只是`content-type`的默认值，但如果用*xhr.setRequestHeader()*手动设置了`content-type`的值，以上默认值就会被覆盖。
 
 另外需要注意的是，若在断网状态下调用 *xhr.send(data)* 方法，则会抛错：
 
@@ -389,7 +374,7 @@ Uncaught NetworkError: Failed to execute 'send' on 'XMLHttpRequest'
 try{
     xhr.send(data)
 }catch(e) {
-    //doSomething...
+    // doSomething...
 };
 ```
 
@@ -453,15 +438,15 @@ xhr 一共有8个相关事件：7个XMLHttpRequestEventTarget事件+1个独有�
 
 下面整理了一张xhr相关事件触发条件表，其中最需要注意的是 `onerror` 事件的触发条件。
 
-| 事件                   | 触发条件                                     |
-| -------------------- | ---------------------------------------- |
+| 事件                 | 触发条件                                                     |
+| -------------------- | ------------------------------------------------------------ |
 | `onreadystatechange` | 每当`xhr.readyState`改变时触发；但`xhr.readyState`由非`0`值变为`0`时不触发。 |
 | `onloadstart`        | 调用`xhr.send()`方法后立即触发，若`xhr.send()`未被调用则不会触发此事件。 |
-| `onprogress`         | `xhr.upload.onprogress`在上传阶段(即`xhr.send()`之后，`xhr.readystate=2`之前)触发，每50ms触发一次；`xhr.onprogress`在下载阶段（即`xhr.readystate=3`时）触发，每50ms触发一次。 |
-| `onload`             | 当请求成功完成时触发，此时`xhr.readystate=4`          |
-| `onloadend`          | 当请求结束（包括请求成功和请求失败）时触发                    |
-| `onabort`            | 当调用`xhr.abort()`后触发                      |
-| `ontimeout`          | `xhr.timeout`不等于0，由请求开始即`onloadstart`开始算起，当到达`xhr.timeout`所设置时间请求还未结束即`onloadend`，则触发此事件。 |
+| `onprogress` *       | `xhr.upload.onprogress`在上传阶段(即`xhr.send()`之后，`xhr.readystate=2`之前)触发，每50ms触发一次；`xhr.onprogress`在下载阶段（即`xhr.readystate=3`时）触发，每50ms触发一次。 |
+| `onload` *           | 当请求成功完成时触发，此时`xhr.readystate=4`                 |
+| `onloadend`          | 当请求结束（包括请求成功和请求失败）时触发                   |
+| `onabort`            | 当调用`xhr.abort()`后触发                                    |
+| `ontimeout` *        | `xhr.timeout`不等于0，由请求开始即`onloadstart`开始算起，当到达`xhr.timeout`所设置时间请求还未结束即`onloadend`，则触发此事件。 |
 | `onerror`            | 在请求过程中，若发生`Network error`则会触发此事件（若发生`Network error`时，上传还没有结束，则会先触发`xhr.upload.onerror`，再触发`xhr.onerror`；若发生`Network error`时，上传已经结束，则只会触发`xhr.onerror`）。**注意**，只有发生了网络层级别的异常才会触发此事件，对于应用层级别的异常，如响应返回的`xhr.statusCode`是`4xx`时，并不属于`Network error`，所以不会触发`onerror`事件，而是会触发`onload`事件。 |
 
 ## 3、事件触发顺序
@@ -502,7 +487,7 @@ xhr 一共有8个相关事件：7个XMLHttpRequestEventTarget事件+1个独有�
 xhr.onload = function () {
     //如果请求成功
     if(xhr.status == 200){
-      //do successCallback
+      // do successCallback
     }
   }
 ```
@@ -601,6 +586,39 @@ https://jsonlint.com/
 ## 5、$.ajax(url, [settings])
 
 > [$.ajax() 参数详解](http://jquery.cuishifeng.cn/jQuery.Ajax.html)
+
+# # XHR 请求本地 JSON
+
+- 创建 JSON 文件并封装 JSON 数据
+
+  > 注意：一个json文件就是一个json对象，可以是数组或对象，在json文件中不能添加注释，否则报错。
+
+- 请求 JSON 数据 并实现异步加载
+
+  ```js
+  // 1. 创建请求对象
+  var xhr = new XMLHttpRequest();
+  // 2. 配置请求
+  var url = "../json/data.json";
+  xhr.responseType = "json";
+  xhr.open("GET", url, true);
+  // 4. 发送请求
+  xhr.send(null);
+  // 5. 监听请求
+  xhr.onload = function() {
+      // 异步加载
+      var list = document.querySelector(".list");
+      var htmlStr = "";
+      this.response.forEach(function(obj, index, arr) {
+          htmlStr += "<li>";
+          htmlStr += "<span class='name'>姓名：" + obj.name + "</span>";
+          htmlStr += "&nbsp;&nbsp;";
+          htmlStr += "<span class='age'>年龄："  + obj.age + "</span>";
+          htmlStr += "</li>";
+      });
+      list.innerHTML = htmlStr;
+  }
+  ```
 
 # # 跨域
 
