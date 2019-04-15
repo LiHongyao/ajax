@@ -653,7 +653,7 @@ jsonp 跨域本质并不是ajax，只是执行了跨域js，html中，所有带`
 细心的你可能会发现，像诸如：
 
 ```html
-<script type="text/javascript" src="http://www.a.com/scripts/1.js"></script>
+<script src="http://www.a.com/scripts/1.js"></script>
 
 <img src="http://www.b.com/images/1.jpg" />
 
