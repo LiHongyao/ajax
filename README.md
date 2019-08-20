@@ -2,7 +2,7 @@
 
 Ajax 即 “*Asynchronous  Javascript And XML*”（异步 JavaScript 和 XML），是指一种创建交互式[网页](https://baike.baidu.com/item/网页/99347)应用的网页开发技术。
 
-Ajax = 异步 [JavaScript](https://baike.baidu.com/item/JavaScript) 和 XML 或者是 HTML（[标准通用标记语言](https://baike.baidu.com/item/标准通用标记语言/6805073)的子集）。
+Ajax = 异步 [JavaScript](https://baike.baidu.com/item/JavaScript) 和 XML 。
 
 Ajax 是一种用于创建快速动态网页的技术。
 
@@ -16,8 +16,8 @@ Ajax 是一种在无需重新加载整个网页的情况下，能够更新部分
 
 ## 1、同步异步
 
-- 同步：主线程执行，客户端发起请求->服务器响应->页面加载，阻塞线程。
-- 异步：后台执行，客户端发起请求->服务器响应->页面加载同时执行。
+- 同步：主线程执行客户端发起请求->服务器响应->页面加载，阻塞线程。
+- 异步：后台执行客户端发起请求->服务器响应->页面加载，同时执行。
 
 ## 2、GET、POST
 
@@ -135,6 +135,9 @@ https://jsonlint.com/
 
 ## 2、跨域请求
 
+参考：<https://blog.csdn.net/itcats_cn/article/details/82318092>
+
 - JSONP
 - CROS
 - 代理跨域
+
