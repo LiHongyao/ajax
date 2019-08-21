@@ -6,16 +6,24 @@
 // 1. 创建请求对象
 let xhr = new XMLHttpRequest();
 // 2. 配置请求
-xhr.open("GET", "http://127.0.0.1:8081/heros?name=吕布", true);
+// -> xhr.open(method, url, sync)
+xhr.open("GET", "http://127.0.0.1:8081/heros", true);
+// -> 设置响应类型
 xhr.responseType = "json";
+// -> 设置请求超时时间
+xhr.timeout = 10000;
 // 3. 发送请求
-xhr.send(null);
-// 4. 监听请求
+xhr.send();
+// 4. 事件监听
+// -> 请求完成
 xhr.onload = function() {
+    // readyState 请求状态
+    // status 状态码
     if(xhr.readyState == 4 && xhr.status == 200) {
+        // 打印结果
         console.log(xhr.response);
     }else {
-        console.log("err");
+        console.log(`XMLHttpRequest_ERROR_STATUS：${xhr.status}`);
     }
 }
 ```
