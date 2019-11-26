@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>跨域-demo</title>
+</head>
+
+<body>
+    <!-- # JSONP -->
+    <!-- 1. 原生实现 -->
+    <!-- <script>
+        // 动态创建script标签
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        // 传参并指定回调执行函数为onBack
+        script.src = `http://127.0.0.1/info?name=木子李&callback=onBack`;
+        document.body.appendChild(script);
+        // 回调执行函数
+        function onBack(res) {
+            console.log(res);
+        }
+    </script> -->
+
+
+    <!-- 2. jquery -->
+    <!-- <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script>
+        $.ajax({
+            url: "http://127.0.0.1/info",
+            type: "GET",
+            dataType: "jsonp",  // 请求方式为jsonp
+            jsonpCallback: "onBack",    // 自定义回调函数名
+            data: { name: "木子李" }
+        });
+        function onBack(data) {
+            console.log(data)
+        }
+    </script> -->
+</body>
+
+</html>
