@@ -16,7 +16,7 @@ $.ajax({
     url: "http://127.0.0.1:8081/heros",
     dataType: "json"
 }).done(res => {
-    loadingHeros(res);
+    console.log(res);
 }).fail(err => {
     console.log(err);
 });

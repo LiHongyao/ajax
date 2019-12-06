@@ -14,7 +14,7 @@
 
 ```js
 axios({
-    method: "get",
+    method: "GET",
     url: "http://127.0.0.1:8081/heros"
 }).then(res => {
     console.log(res.data);
@@ -28,7 +28,7 @@ axios({
 ```js
 axios({
     url: "http://127.0.0.1:8081/login",
-    method: "post",
+    method: "POST",
     responseType: "json",
     data: {
         username: "lihy",
