@@ -1,5 +1,9 @@
 # 一、概述
 
+MDN 介绍：https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API
+
+Fetch API 提供了一个获取资源的接口（包括跨域请求）.
+
 # 二、示例
 
 ## 1、GET
@@ -35,7 +39,7 @@ fetch("http://127.0.0.1:8081/login",{
 
 - 语法更加简洁、易读
 
-- 基于Promise实现的接口，避免了ajax的回调地狱
+- 基于Promise实现的接口
 
 - 以数据流的形式返回数据，数据量大和传输大文件有优势
 
@@ -44,9 +48,9 @@ fetch("http://127.0.0.1:8081/login",{
 - cors的支持，fetch的 response.type 有三种不一样的状态:
 
   - basic：正常的同域请求
-- cors：CORS机制下的跨域请求，只支持三种content-Type
+  - cors：CORS机制下的跨域请求，只支持三种content-Type
     - application/x-www-form-urlencoded
-  - multipart/form-data
+    - multipart/form-data
     - text/plain
 - opaque：非CORS机制下的跨域请求
   
