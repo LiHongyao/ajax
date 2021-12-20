@@ -4,18 +4,14 @@
 
 - 包管理工具下载：`npm i -S axios`
 
-- 通过CDN引入：
-
-```html
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-```
+- CDN引入：https://www.bootcdn.cn/axios/
 
 # 2. GET
 
 ```js
 axios({
     method: "GET",
-    url: "http://127.0.0.1:8081/heros"
+    url: "http://192.168.0.22:8888/info"
 }).then(res => {
     console.log(res.data);
 }).catch(err => {
@@ -27,11 +23,11 @@ axios({
 
 ```js
 axios({
-    url: "http://127.0.0.1:8081/login",
+    url: "http://192.168.0.22:8888/login",
     method: "POST",
     responseType: "json",
     data: {
-        username: "lihy",
+        username: "admin",
         password: "123"
     }
 }).then(res => {
@@ -41,6 +37,12 @@ axios({
 })
 ```
 
+# 4. 全局配置
+
+```javascript
+// 全局设置默认请求地址
+axios.defaults.baseURL = "";
+```
 
 
 

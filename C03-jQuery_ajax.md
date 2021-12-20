@@ -13,7 +13,7 @@
 
 ```js
 $.ajax({
-    url: "http://127.0.0.1:8081/heros",
+    url: "http://192.168.0.22:8888/info",
     dataType: "json"
 }).done(res => {
     console.log(res);
@@ -26,11 +26,11 @@ $.ajax({
 
 ```js
 $.ajax({
-    url: "http://127.0.0.1:8081/login",
+    url: "http://192.168.0.22:8888/login",
     type: "POST",
     dataType: "json",
     data: {
-        username: "lihy",
+        username: "admin",
         password: "123"
     }
 }).done(res => {
