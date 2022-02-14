@@ -7,10 +7,14 @@ Axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js �
 
 特性：
 
-- 支持node端和浏览器端：同样的API，node和浏览器全支持，平台切换无压力
-- 支持Promise：使用Promise管理异步，告别传统callback方式
-- 丰富的配置项：支持拦截器等高级配置
-- 社区支持：axios相关的npm包数量一直在增长
+- 浏览器端发起XMLHttpRequests请求
+- `node`端发起http请求
+- 支持Promise API
+- 监听请求和返回
+- 对请求和返回进行转化
+- 取消请求
+- 自动转换json数据
+- 客户端支持抵御XSRF攻击
 
 # 二、安装
 
